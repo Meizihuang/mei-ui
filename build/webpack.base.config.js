@@ -13,7 +13,7 @@ module.exports = {
     },
     output: {
         filename: "[name].bundle.js",
-        path: config.build.assetsRoot,
+        path: path.resolve(__dirname, '../',"dist"),
         publicPath: process.env.NODE_ENV === 'production' ?
             config.build.assetsPublicPath :
             config.dev.assetsPublicPath
