@@ -146,3 +146,14 @@ plugins: [
 ## 使用 webpack-merge 合并配置文件
 
 npm install --save-dev webpack-merge
+
+## 指定环境
+
+```webpck.prod.config.js
+const webpack = require('webpack');
+new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+     })
+```
+
+# 代码分离

@@ -23,5 +23,8 @@ module.exports = {
         assetsRoot: path.resolve(__dirname, '../dist'),
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
+
+        // source maps
+        devtool: "source-map",
     }
 }
