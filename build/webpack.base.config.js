@@ -1,6 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const packageConfig = require('../package.json')
+const packageConfig = require('../package.json');
 const {
     CleanWebpackPlugin
 } = require('clean-webpack-plugin');
@@ -12,11 +12,10 @@ module.exports = {
         app: "./src/index.js"
     },
     output: {
-        filename: "[name].bundle.js",
-        path: path.resolve(__dirname, '../',"dist"),
+        filename: "[name].js",
+        path: config.build.assetsRoot,
         publicPath: process.env.NODE_ENV === 'production' ?
-            config.build.assetsPublicPath :
-            config.dev.assetsPublicPath
+            config.build.assetsPublicPath : config.dev.assetsPublicPath
     },
     module: {
         rules: [{

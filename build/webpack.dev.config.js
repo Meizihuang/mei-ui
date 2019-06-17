@@ -3,6 +3,7 @@ const merge = require("webpack-merge");
 const baseWebpackConfig = require("./webpack.base.config");
 const config = require("../config");
 const path = require("path");
+const env = require("../config/dev.env");
 
 const HOST = process.env.HOST;
 const PORT = process.env.PORT && Number(process.env.PORT);
@@ -13,7 +14,7 @@ module.exports = merge(baseWebpackConfig, {
     devServer: {
         // 使用 inline 模式时，控制台显示消息级别
         clientLogLevel: "warning",
-        contentBase: path.resolve(__dirname,"../","dist"),
+        contentBase: path.resolve(__dirname, "../", "dist"),
         //  auto open browser
         open: config.dev.autoOpenBrowser,
         host: HOST || config.dev.host,
@@ -47,6 +48,9 @@ module.exports = merge(baseWebpackConfig, {
     plugins: [
         // hot update
         new webpack.NamedModulesPlugin(),
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.DefinePlugin({
+            "process.env": env
+        })
     ]
 })
