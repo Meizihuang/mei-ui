@@ -1,6 +1,7 @@
+import call from './call'
+
+call();
+console.log('The print.js module has loaded! See the network tab in dev tools...');
 export default function printMe() {
-    // console.log("*****");
-    // console.log("1111111111");
-    console.log("6666666666");
-    // cosnole.error('I get called from print.js!');
+    cosnole.error('I get called from print.js!');
 }
