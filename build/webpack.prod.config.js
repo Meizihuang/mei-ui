@@ -1,6 +1,9 @@
 const merge = require("webpack-merge");
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const baseWebpackConfig = require("./webpack.base.config");
+const {
+  BundleAnalyzerPlugin
+} = require("webpack-bundle-analyzer");
 const webpack = require("webpack");
 const env = require("../config/prod.env");
 const config = require("../config");
@@ -29,14 +32,17 @@ module.exports = merge(baseWebpackConfig, {
     }),
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),
+    // 性能优化 可视化分析模板
+    new BundleAnalyzerPlugin(),
   ],
 
   optimization: {
-    runtimeChunk: {
-      name: entrypoint => `manifest.${entrypoint.name}`
-    },
+    runtimeChunk: true,
+    // runtimeChunk: {
+    //   name: entrypoint => `manifest.${entrypoint.name}`
+    // },
     splitChunks: {
-      chunks: 'async',
+      chunks: 'all',
       minSize: 30000,
       maxSize: 0,
       minChunks: 1,
@@ -47,7 +53,8 @@ module.exports = merge(baseWebpackConfig, {
       cacheGroups: {
         vendors: {
           test: /[\\/]node_modules[\\/]/,
-          priority: -10
+          priority: -10,
+          name: "vendors"
         },
         default: {
           minChunks: 2,

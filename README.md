@@ -166,10 +166,6 @@ new webpack.DefinePlugin({
 
 # 代码分离
 
-## 通过入口起点[entry]分离代码
-
-## CommonsChunkPlugin 插件，是一个可选的用于建立一个独立文件(又称作 chunk)的功能，这个文件包括多个入口 chunk 的公共模块。
-
 ## 拆分公共模块，第一次加载时缓存至浏览器缓存中
 
 ## 使用 webpack 构建有三种主要代码类型
@@ -188,41 +184,6 @@ runtime，以及伴随的 manifest 数据，主要是指：在浏览器运行过
 
 当 compiler 开始执行、解析和映射应用程序时，它会保留所有模块的详细要点。这个数据集合称为 "manifest"，当完成打包并发送到浏览器时，runtime 会通过 manifest 来解析和加载模块。无论你选择哪种 模块语法，那些 import 或 require 语句现在都已经转换为 **webpack_require** 方法，此方法指向模块标识符(module identifier)。通过使用 manifest 中的数据，runtime 将能够检索这些标识符，找出每个标识符背后对应的模块。
 
-## 多入口-将多个入口 chunk 的公共模块提取为一个单独 chunk
-
-```webpack.prod.config.js
-const webpack = require("webpack");
-// 分离
-entry: {
-      index: './src/index.js',
-      another: './src/another-module.js'
-}
-
-// 防止代码重复
-new webpack.optimize.CommonsChunkPlugin({
-  name: 'common' // 指定公共 bundle 的名称
-})
-```
-
-## 使用 import("xxxx") 动态导入时的动态代码拆分
-
-```webpack.prod.config.js
-output: {
-  chunkFilename: "[name].bundle.js"
-}
-```
-
-# 懒加载
-
-继续上文动态加载，当与用户第一次交互时（如 click） 才加载模块。
-
-```xxx.js
-user.onclick = (e) => import(/* webpackChunkName: "print" */ 'xxx.js').then (module => {
-  var test = module.default;
-  test();
-})
-```
-
 [vue 实现懒加载](https://alexjover.com/blog/lazy-load-in-vue-using-webpack-s-code-splitting/)
 
 # 缓存
@@ -231,57 +192,98 @@ user.onclick = (e) => import(/* webpackChunkName: "print" */ 'xxx.js').then (mod
 
 [浏览器缓存机制](https://juejin.im/entry/5ad86c16f265da505a77dca4)
 
-通过配置使服务器文件发生变化时，浏览器不使用缓存.代码拆分为 "vendor" 、"manifest"、"app"
+## 分离好处
 
-- keep module.id stable when vendor modules does not change
+- 减少单一资源文件的大小（大小与数目之间有一个权衡）
 
-- 注意，引入顺序在这里很重要。CommonsChunkPlugin 的 'vendor' 实例，必须在 'manifest' 实例之前引入。
+- 对于多页面或者动态懒加载下的多路由情况下减少冗余的内容（同样的模块在不同的逻辑中可以被重复使用）
 
-```webpack.prod.config.js
+- 通过不用页面直接模块的复用提高缓存作用
 
-const webpack = require('webpack');
+- 将长期不会改变的内容打包到一个文件中避免新发布带来的资源更新，提高缓存的命中
 
-entry: {
-  app: "./src/index.js",
-  filename: "[name].[chunkhash].js",
-  chunkFilename: "[id].[chunkhash].js"
-}
+## webpack SplitChunksPlugin 插件是一个可选的用于建立一个独立文件(又称作 chunk)的功能,production 模式下，它是默认开启的，仅仅对按需引入的动态加载模块有效。
 
-plugins: [
-  new webpack.HashedModuleIdsPlugin(),
-  new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks (module) {
-        // any required modules inside node_modules are extracted to vendor
-        return (
-          module.resource &&
-          /\.js$/.test(module.resource) &&
-          module.resource.indexOf(
-            path.join(__dirname, '../node_modules')
-          ) === 0
-        )
+## chunk 概念
+
+chunk 是指最终被打包出来的代码块（构建产物每个文件就是一个 chunk），code splitting 是指按何种规则生成这些代码块。以下情况会做 code splitting:
+
+- 多 entry ，多 entry 不仅可以用来多个独立应用的配置，还可以实现一个应用打包为多个包。
+
+- 动态载入，也就是项目中通过 import() 引入的部分。
+
+webpack 会 以 entry 和 import 为切割点划分文件，然后按照 optimization.splitChunks 配置来做公共 chunk 的提取。
+
+## webpack 默认规则
+
+- chunk 是共享的或者是在 node_modules 下面。
+
+- chunk 的大小大于 30kb（压缩和 gzip 之前）。
+
+- 每个页面最多有 5 个异步加载请求该 module
+
+- 初始化页面最多有 3 个请求该 module
+
+## default configuration
+
+```webpack.config.js
+module.exports = {
+  //...
+  optimization: {
+    splitChunks: {
+      chunks: 'async',
+      minSize: 30000,
+      maxSize: 0,
+      minChunks: 1,
+      maxAsyncRequests: 5,
+      maxInitialRequests: 3,
+      automaticNameDelimiter: '~',
+      name: true,
+      cacheGroups: {
+        vendors: { // 默认
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10
+        },
+        default: { // 默认
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true
+        },
+        common: { // 这个不是默认的，我自己加的
+          filename: '[name].bundle.js',
+          name: 'common',
+          chunks: 'initial',
+          minChunks: 1,
+          enforce: true,
+        }
       }
-    }),
-    // generate rutime module manifest file
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest',
-      minChunks: Infinity
-    }),
-
-    // 一个 chunk 的多个子 chunk 会有公共的依赖,可以将这些公共模块移入父 chunk。
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'app',
-      async: 'vendor-async',
-      children: true,
-      minChunks: 3
-    }),
-]
-```
-
-## 由于浏览器缓存，当部署新版本而没有更新资源文件名，浏览器可能会认为没有更新，就会使用它的缓存版本。
-
-## 通过必要的配置，以确保 webpack 编译生成的文件能够被客户端缓存，而在文件内容变化后，能够请求到新的文件。
+    }
+  }
+};
 
 ```
 
-```
+## 参数解释
+
+- chunks: async | initial | all , "async"针对异步加载的 chunk code splitting , "initial" 针对初始化 chunk , "all" 针对所有 chunk (当设 置为 "initial" 时，异步加载也会被分割)
+- minSize: 生成 chunk 要 > 30k 时才会做 code splitting (针对于提取公共 chunk 的时候，不管再大也不会把动态加载的模块合并到初始化模块中)
+- maxSize: 文件的最大尺寸，优先级：maxInitialRequest/maxAsyncRequests < maxSize < minSize
+- minChunks: 被提取的一个模块至少需要在几个 chunk 中被引用，这个值越大，抽取出来的文件就越小
+- maxAsyncRequests: 最多有 5 个异步加载请求该 module
+- maxInitialRequests: 初始化的时候最多有 3 个请求该 module
+- automaticNameDelimiter: 名字中间的间隔符
+- name: chunk 的名称，如果设置为固定的字符串那么所有的 chunk 都会被合并成一个，
+- cacheGroups: 自定义规则，会继承和覆盖上面的配置, 它也有自己的默认配置。
+- test: 符合这个规则的才会加到对应的 group 中
+- priority: 一个模块可能属于多个 chunkGroup，这里是优先级，自定义的 group 是 0
+- reuseExistingChunk: 当 module 未变时，是否可以使用之前的 chunk.
+- enforce: 不管 maxInitialRequest maxAsyncRequests maxSize minSize 怎么样都会生成这个 chunk
+
+## optimization.runtimeChunk
+
+这个值默认是 false，当 runtimeChunk 为 true 时，会将 webpack 生成的 runtime 作为独立 chunk ，runtime 包含在模块交互时，模块所需的加载和解析逻辑,如果配置了改项，那么你需要在你的页面中提前引入相关的 runtime 的 js。
+
+## 参考文章
+
+[gitbub](https://github.com/frontend9/fe9-library/issues/242)
+[掘金](https://juejin.im/post/5af15e895188256715479a9a)

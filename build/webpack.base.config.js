@@ -9,8 +9,8 @@ const config = require("../config");
 module.exports = {
     context: path.resolve(__dirname, '../'),
     entry: {
-        app: "./src/index.js",
-        another: "./src/another.js"
+        app: "./src/index.js"
+        // another: "./src/another.js"
     },
     output: {
         filename: "[name].js",
