@@ -1,6 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const packageConfig = require('../package.json');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const {
     CleanWebpackPlugin
 } = require('clean-webpack-plugin');
@@ -9,8 +10,8 @@ const config = require("../config");
 module.exports = {
     context: path.resolve(__dirname, '../'),
     entry: {
-        app: "./src/index.js"
-        // another: "./src/another.js"
+        index: "./src/pages/index/index.js",
+        news: "./src/pages/news/index.js"
     },
     output: {
         filename: "[name].js",
@@ -21,9 +22,20 @@ module.exports = {
     module: {
         rules: [{
                 test: /\.css$/,
-                use: [
-                    "style-loader",
-                    "css-loader"
+                use: [{
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            publicPath: (resourcePath, context) => {
+                                // publicPath is the relative path of the resource to the context
+                                // e.g. for ./css/admin/main.css the publicPath will be ../../
+                                // while for ./css/main.css the publicPath will be ../
+                                return path.relative(path.dirname(resourcePath), context) + '/';
+                            },
+                            hmr: process.env.NODE_ENV === 'development',
+                        }
+                    },
+                    "css-loader",
+                    "sass-loader"
                 ]
             },
             {

@@ -10,6 +10,13 @@ const config = require("../config");
 const utils = require("./utils");
 
 module.exports = merge(baseWebpackConfig, {
+  module: {
+    rules: utils.styleLoaders({
+      sourceMap: true,
+      extrac: true,
+      usePostCss: true
+    })
+  },
   output: {
     path: config.build.assetsRoot,
     // 非入口 chunk 文件名称 (import("xxx") 如动态加载)
