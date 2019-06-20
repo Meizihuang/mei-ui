@@ -4,13 +4,22 @@ const baseWebpackConfig = require("./webpack.base.config");
 const config = require("../config");
 const path = require("path");
 const env = require("../config/dev.env");
+const utils = require("./utils");
 
 const HOST = process.env.HOST;
 const PORT = process.env.PORT && Number(process.env.PORT);
 
-module.exports = merge(baseWebpackConfig, {
+let webpcakDevConfig = merge(baseWebpackConfig, {
+    module: {
+        rules: utils.styleLoaders({
+            sourceMap: true,
+            extrac: false,
+            usePostCss: true
+        })
+    },
     // source maps 映射源文件，追踪错误出处 https://www.webpackjs.com/configuration/devtool/
     devtool: config.dev.devtool,
+    mode: "development",
     devServer: {
         // 使用 inline 模式时，控制台显示消息级别
         clientLogLevel: "warning",
@@ -54,3 +63,5 @@ module.exports = merge(baseWebpackConfig, {
         })
     ]
 })
+
+module.exports = webpcakDevConfig

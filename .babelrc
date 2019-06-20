@@ -1,0 +1,7 @@
+// babel config
+{
+    // Transcoding rules
+    "presets": ["@babel/preset-env"],
+    // used plugins
+    "plugins": ["syntax-dynamic-import"]
+}

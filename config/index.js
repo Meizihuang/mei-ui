@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require("path");
+const glob = require("glob");
 
 module.exports = {
     dev: {
@@ -19,15 +20,18 @@ module.exports = {
         devtool: "inline-source-map",
     },
     build: {
-        // Template for index.html
-        index: path.resolve(__dirname, '../dist/index.html'),
-
         // Paths
         assetsRoot: path.resolve(__dirname, '../dist'),
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
-
+        entryFileArr: glob.sync(path.resolve(__dirname, "../src/pages/**/*.js")),
+        templatePath: folderName => path.resolve(__dirname, `../src/pages/${folderName}/index.html`),
         // source maps
         devtool: "source-map",
+
+        // html title
+        htmlTitle: {
+
+        }
     }
 }
