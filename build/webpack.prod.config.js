@@ -11,7 +11,7 @@ const config = require("../config");
 const utils = require("./utils");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
+
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 
@@ -79,14 +79,7 @@ module.exports = env => {
           }]
         },
         canPrint: true
-      }),
-
-      // copy custom static assets
-      new CopyWebpackPlugin([{
-        from: path.resolve(__dirname, '../static'),
-        to: config.build.assetsSubDirectory,
-        ignore: ['.*']
-      }])
+      })
     ],
 
     optimization: {

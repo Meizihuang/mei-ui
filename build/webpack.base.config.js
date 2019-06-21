@@ -1,6 +1,6 @@
 const path = require("path");
 const utils = require("./utils");
-
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const {
     CleanWebpackPlugin
 } = require('clean-webpack-plugin');
@@ -27,6 +27,15 @@ module.exports = env => {
         },
         module: {
             rules: [{
+                    test: /\.(html)$/,
+                    use: {
+                        loader: 'html-loader',
+                        options: {
+                            attrs: [':data-src']
+                        }
+                    }
+                },
+                {
                     test: /\.js$/,
                     exclude: /(node_modules|bower_components)/,
                     use: {
@@ -68,8 +77,16 @@ module.exports = env => {
             ]
         },
         plugins: [
+
             // 清理 /dist无用文件夹
             new CleanWebpackPlugin(),
+
+            // copy custom static assets
+            new CopyWebpackPlugin([{
+                from: path.resolve(__dirname, '../static'),
+                to: config.build.assetsSubDirectory,
+                ignore: ['.*']
+            }])
         ]
     }
     return webpackBaseConf
