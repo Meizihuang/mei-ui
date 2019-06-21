@@ -3,8 +3,10 @@ const path = require("path");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const config = require("../config");
 
-exports.assetsPath = function (_path) {
-    const assetsSubDirectory = process.env.NODE_ENV = "production" ? config.build.assetsSubDirectory : config.dev.assetsSubDirectory;
+exports.assetsPath = function (_path, env = {
+    NODE_ENV: "development"
+}) {
+    const assetsSubDirectory = env.NODE_ENV === "production" ? config.build.assetsSubDirectory : config.dev.assetsSubDirectory;
     return path.posix.join(assetsSubDirectory, _path);
 }
 
@@ -73,7 +75,9 @@ exports.getEntryJs = function () {
     return output
 }
 
-exports.getHtmlTemplateConf = function (options) {
+exports.getHtmlTemplateConf = function (options, env = {
+    NODE_ENV: "development"
+}) {
     if (!Object.is(Object.prototype.toString.call(options), "[object Object]")) return false;
     let optionsConf = {
         title: options.title,
@@ -84,15 +88,13 @@ exports.getHtmlTemplateConf = function (options) {
         chunks: [options.chunk]
     };
 
-    console.log(process.env.NODE_ENV);
-
-    if (process.env.NODE_ENV === "production") {
+    if (env.NODE_ENV === "production") {
         optionsConf = Object.assign({}, optionsConf, {
-            filename: `${options.folderName}.[contenthash].html`,
+            filename: `${options.folderName}.[hash:8].html`,
             meta: {
                 "viewport": "width=device-width,initial-scale=1.0,user-scalable=no"
             },
-            minify: process.env.NODE_ENV === "development" ? false : {
+            minify: {
                 removeComments: true, // 移除HTML中的注释
                 collapseWhitespace: true, // 折叠空白区域 也就是压缩代码
                 removeAttributeQuotes: true // 去除属性引用
