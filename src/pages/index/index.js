@@ -1,9 +1,5 @@
 'use strict';
-import './index.css';
-import "./index.html";
-
-console.log("in")
-console.log(1);
+import './index.scss';
 
 function jumpto() {
     var btn = document.querySelector(".button");
@@ -11,7 +7,7 @@ function jumpto() {
     btn.onclick = function (e) {
         console.info("***************");
         // console.log("funck")
-        // window.location.href = "./news.html";
+        window.location.href = "./news.html";
     }
 }
 jumpto();

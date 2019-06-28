@@ -287,3 +287,9 @@ module.exports = {
 
 [gitbub](https://github.com/frontend9/fe9-library/issues/242)
 [掘金](https://juejin.im/post/5af15e895188256715479a9a)
+
+# polyfill: 在 Web 开发中，在不支持该功能的 Web 浏览器上实现功能的代码
+
+#shimming
+
+webpack 编译器(compiler)能够识别遵循 ES2015 模块语法、CommonJS 或 AMD 规范编写的模块。然而，一些第三方的库(library)可能会引用一些全局依赖（例如 jQuery 中的 \$）。这些库也可能创建一些需要被导出的全局变量。这些“不符合规范的模块”就是 shimming 发挥作用的地方。

@@ -90,7 +90,7 @@ exports.getHtmlTemplateConf = function (options, env = {
 
     if (env.NODE_ENV === "production") {
         optionsConf = Object.assign({}, optionsConf, {
-            filename: `${options.folderName}.[hash:8].html`,
+            // filename: `${options.folderName}.[hash:8].html`,
             meta: {
                 "viewport": "width=device-width,initial-scale=1.0,user-scalable=no"
             },

@@ -6,6 +6,7 @@ const {
 } = require('clean-webpack-plugin');
 const config = require("../config");
 
+
 module.exports = env => {
 
     let webpackBaseConf = {
@@ -18,12 +19,14 @@ module.exports = env => {
                 config.build.assetsPublicPath : config.dev.assetsPublicPath
         },
         resolve: {
+
             // 别名
             alias: {
                 "@": path.resolve(__dirname, "../src")
             },
+
             // 省略后缀
-            extensions: ['.js', '.json', '.css']
+            extensions: ['.js', '.json', '.css', '.scss']
         },
         module: {
             rules: [{

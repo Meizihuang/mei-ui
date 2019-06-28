@@ -3,7 +3,7 @@ const merge = require("webpack-merge");
 const baseWebpackConfig = require("./webpack.base.config");
 const config = require("../config");
 const path = require("path");
-const devEnv = require("../config/dev.env");
+// const devEnv = require("../config/dev.env");
 const utils = require("./utils");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
@@ -76,12 +76,14 @@ module.exports = env => {
         },
         plugins: [
 
-            // hot update
-            new webpack.NamedModulesPlugin(),
+            // hot update but if you set mode: "development", you don't need to set this item.
+            // new webpack.NamedModulesPlugin(),
             new webpack.HotModuleReplacementPlugin(),
-            new webpack.DefinePlugin({
-                "process.env": devEnv
-            })
+
+            // if you set mode: "development", you don't need to set this item.
+            // new webpack.DefinePlugin({
+            //     "process.env": devEnv
+            // })
         ]
     })
 

@@ -46,7 +46,8 @@
     "vue": "^2.6.10"
   },
   "sideEffects": [
-    "*.css"
+    "*.css",
+    "*.scss"
   ],
   "browserslist": [
     "defaults",

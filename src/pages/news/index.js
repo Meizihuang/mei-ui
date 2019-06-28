@@ -1,4 +1,4 @@
 'use strict';
-import "./index.css"
+import "./index.scss"
 
 console.log("welcome to news page");

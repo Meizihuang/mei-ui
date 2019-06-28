@@ -1,12 +1,12 @@
 const merge = require("webpack-merge");
 const path = require("path");
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+// const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const baseWebpackConfig = require("./webpack.base.config");
 const {
   BundleAnalyzerPlugin
 } = require("webpack-bundle-analyzer");
 const webpack = require("webpack");
-const prdEnv = require("../config/prod.env");
+// const prdEnv = require("../config/prod.env");
 const config = require("../config");
 const utils = require("./utils");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -41,24 +41,24 @@ module.exports = env => {
     devtool: config.build.devtool,
     plugins: [
 
-      // 压缩js 
-      new UglifyJSPlugin({
-        test: /\.js($|\?)/i,
-        include: /\/src/,
-        exclude: /\/node_modules/,
-        sourceMap: true
-      }),
+      // 压缩js if you set mode: "production", you don't need to set this item.
+      // new UglifyJSPlugin({
+      //   test: /\.js($|\?)/i,
+      //   include: /\/src/,
+      //   exclude: /\/node_modules/,
+      //   sourceMap: true
+      // }),
 
-      // 指定环境
-      new webpack.DefinePlugin({
-        "process.env": prdEnv
-      }),
+      // 指定环境 if you set mode: "production", you don't need to set this item.
+      // new webpack.DefinePlugin({
+      //   "process.env": prdEnv
+      // }),
 
       // keep module.id stable when vendor modules does not change
       new webpack.HashedModuleIdsPlugin(),
 
       // 性能优化 可视化分析模板
-      new BundleAnalyzerPlugin(),
+      // new BundleAnalyzerPlugin(),
 
       // 分离css
       new MiniCssExtractPlugin({
@@ -159,6 +159,7 @@ module.exports = env => {
 
     webpackProdConfig.plugins.push(new HtmlWebpackPlugin(utils.getHtmlTemplateConf(options, env)));
   })
+
 
   return webpackProdConfig
 };
