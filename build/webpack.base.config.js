@@ -9,7 +9,7 @@ const config = require("../config");
 module.exports = {
     context: path.resolve(__dirname, '../'),
     entry: {
-        app: "./src/index.js"
+        app: "./src/main.js"
     },
     output: {
         filename: "[name].js",
@@ -19,6 +19,13 @@ module.exports = {
     },
     module: {
         rules: [{
+                test: /\.js/,
+                include: path.resolve(__dirname, "../src"),
+                use: {
+                    loader: "babel-loader"
+                }
+            },
+            {
                 test: /\.css$/,
                 use: [
                     "style-loader",
