@@ -1,3 +1,41 @@
 {
+    "presets": [
+        // 如果要转译ES6语法，只要按如下方式配置即可,但着只是语法转义如（ class 箭头函数 解构赋值 ）
+        // 但对一些新增api以及全局函数（例如：Promise）无法进行转译，需要引入babel-polyfill或transform-runtime
+        // https://babeljs.io/docs/en/babel-preset-env
+        "@babel/preset-env",
+        {
+            //参数："amd" | "umd" | "systemjs" | "commonjs" | false，默认为'commonjs'
+            "modules": false,
+            // "targets": { // 指定要转义到哪个环境
+            //     // 浏览器环境 推荐使用 .browserslistrc 配置
+            //     // "browsers": ["last 2 versions", "safari >= 7"],
+            //     // node 环境
+            //     // "node": "10.16.0"
+            // },
+            // //是否将ES6的模块化语法转译成其他类型
 
+            //是否进行debug操作，会在控制台打印出所有插件中的log，已经插件的版本
+            // "debug": false,
+            //强制开启某些模块，默认为[]
+            // "include": ["transform-es2015-arrow-functions"],
+            //禁用某些模块，默认为[]
+            // "exclude": ["transform-es2015-for-of"],
+            //是否自动引入polyfill，开启此选项必须保证已经安装了babel-polyfill
+            //参数：Boolean，默认为false.
+            // "useBuiltIns": false
+        }
+    ],
+    "plugins": [
+        //  auto add polyfill （ default config ）
+        "@babel/plugin-transform-runtime",
+        // https://babeljs.io/docs/en/babel-plugin-transform-runtime/
+        {
+            "absoluteRuntime": false,
+            "corejs": false,
+            "helpers": true,
+            "regenerator": true,
+            "useESModules": false
+        }
+    ]
 }
