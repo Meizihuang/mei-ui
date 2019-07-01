@@ -49,10 +49,10 @@ module.exports = env => {
       //   sourceMap: true
       // }),
 
-      // 指定环境 if you set mode: "production", you don't need to set this item.
-      // new webpack.DefinePlugin({
-      //   "process.env": prdEnv
-      // }),
+      // 指定环境
+      new webpack.DefinePlugin({
+        "process.env": prdEnv
+      }),
 
       // keep module.id stable when vendor modules does not change
       new webpack.HashedModuleIdsPlugin(),

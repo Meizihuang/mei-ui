@@ -81,9 +81,9 @@ module.exports = env => {
             new webpack.HotModuleReplacementPlugin(),
 
             // if you set mode: "development", you don't need to set this item.
-            // new webpack.DefinePlugin({
-            //     "process.env": devEnv
-            // })
+            new webpack.DefinePlugin({
+                "process.env": devEnv
+            })
         ]
     })
 
