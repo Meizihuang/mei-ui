@@ -66,13 +66,14 @@ module.exports = env => {
             ]
         },
         plugins: [
+
             // 生成 /dist index.html 并自动加载output js 文件
             new HtmlWebpackPlugin({
                 title: packageConfig.name,
                 filename: "index.html",
                 template: config.build.template,
                 inject: true,
-                favicon: path.resolve(__dirname, "../dist/logo.png"),
+                favicon: path.resolve(__dirname, "../public/logo.png"),
                 minify: {
                     removeComments: true,
                     collapseWhitespace: true,
