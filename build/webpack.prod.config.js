@@ -2,6 +2,9 @@ const merge = require("webpack-merge");
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const baseWebpackConfig = require("./webpack.base.config");
 const {
+  CleanWebpackPlugin
+} = require('clean-webpack-plugin');
+const {
   BundleAnalyzerPlugin
 } = require("webpack-bundle-analyzer");
 const webpack = require("webpack");
@@ -34,6 +37,8 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.HashedModuleIdsPlugin(),
     // 性能优化 可视化分析模板
     new BundleAnalyzerPlugin(),
+    // 清理 /dist无用文件夹
+    new CleanWebpackPlugin(),
   ],
 
   optimization: {
