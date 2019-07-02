@@ -2,8 +2,13 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const packageConfig = require('../package.json');
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 const config = require("../config");
+
+function resolve(_path) {
+    return path.join(__dirname, "../", _path)
+}
 
 module.exports = env => {
     const baseWebpackConfig = {
@@ -17,8 +22,20 @@ module.exports = env => {
             publicPath: env.NODE_ENV === 'production' ?
                 config.build.assetsPublicPath : config.dev.assetsPublicPath
         },
+        resolve: {
+            extends: ['.js', '.vue', '.json', '.ts'],
+            alias: {
+                '@': resolve("src")
+            }
+        },
         module: {
             rules: [{
+                    test: /\.vue$/,
+                    use: {
+                        loader: "vue-loader"
+                    }
+                },
+                {
                     test: /\.js/,
                     include: path.resolve(__dirname, "../src"),
                     use: {
@@ -27,26 +44,31 @@ module.exports = env => {
                 },
                 {
                     test: /\.(sa|sc|c)ss$/,
-                    use: [
-                        "style-loader", // creates style nodes from JS strings
+                    use: [{
+                            loader: "vue-style-loader", // creates style nodes from JS strings
+                            options: {
+                                sourceMap: false,
+                                shadowMode: false
+                            }
+                        },
                         {
                             loader: "css-loader", // translates CSS into CommonJS
                             options: {
                                 // 0 => no loaders (default); 1 => postcss-loader; 2 => postcss-loader, sass-loader
                                 importLoaders: 2,
-                                sourceMap: true,
+                                sourceMap: false,
                             }
                         },
                         {
                             loader: "postcss-loader",
                             options: {
-                                sourceMap: true,
+                                sourceMap: false,
                             }
                         },
                         {
                             loader: "sass-loader", // compiles Sass to CSS, using Node Sass by default
                             options: {
-                                sourceMap: true
+                                sourceMap: false
                             }
                         }
 
@@ -104,7 +126,8 @@ module.exports = env => {
                 from: path.resolve(__dirname, "../public"),
                 to: path.resolve(__dirname, "../dist"),
                 ignore: [".*"]
-            }])
+            }]),
+            new VueLoaderPlugin()
         ]
     }
 
