@@ -1,7 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const packageConfig = require('../package.json');
-const copyPlugin = require("copy-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const config = require("../config");
 
@@ -100,7 +100,7 @@ module.exports = env => {
                     removeAttributeQuotes: true
                 }
             }),
-            new copyPlugin([{
+            new CopyWebpackPlugin([{
                 from: path.resolve(__dirname, "../public"),
                 to: path.resolve(__dirname, "../dist"),
                 ignore: [".*"]
