@@ -26,10 +26,30 @@ module.exports = env => {
                     }
                 },
                 {
-                    test: /\.css$/,
+                    test: /\.(sa|sc|c)ss$/,
                     use: [
-                        "style-loader",
-                        "css-loader"
+                        "style-loader", // creates style nodes from JS strings
+                        {
+                            loader: "css-loader", // translates CSS into CommonJS
+                            options: {
+                                // 0 => no loaders (default); 1 => postcss-loader; 2 => postcss-loader, sass-loader
+                                importLoaders: 2,
+                                sourceMap: true,
+                            }
+                        },
+                        {
+                            loader: "postcss-loader",
+                            options: {
+                                sourceMap: true,
+                            }
+                        },
+                        {
+                            loader: "sass-loader", // compiles Sass to CSS, using Node Sass by default
+                            options: {
+                                sourceMap: true
+                            }
+                        }
+
                     ]
                 },
                 {
