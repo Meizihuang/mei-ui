@@ -1,6 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const packageConfig = require('../package.json');
+const copyPlugin = require("copy-webpack-plugin");
 
 const config = require("../config");
 
@@ -71,8 +72,18 @@ module.exports = env => {
                 filename: "index.html",
                 template: config.build.template,
                 inject: true,
-                favicon: path.resolve(__dirname, "")
+                favicon: path.resolve(__dirname, "../dist/logo.png"),
+                minify: {
+                    removeComments: true,
+                    collapseWhitespace: true,
+                    removeAttributeQuotes: true
+                }
             }),
+            new copyPlugin([{
+                from: path.resolve(__dirname, "../public"),
+                to: path.resolve(__dirname, "../dist"),
+                ignore: [".*"]
+            }])
         ]
     }
 
