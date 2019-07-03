@@ -23,7 +23,7 @@ module.exports = env => {
                 config.build.assetsPublicPath : config.dev.assetsPublicPath
         },
         resolve: {
-            extends: ['.js', '.vue', '.json', '.ts'],
+            extensions: ['.js', '.vue', '.json', '.ts'],
             alias: {
                 '@': resolve("src")
             }
