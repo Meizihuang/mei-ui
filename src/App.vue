@@ -1,8 +1,8 @@
 <template>
-  <div class="app">
+  <div id="app">
     <div class="nav">
-      <router-link to="/">首页</router-link>
-      <router-link to="/about">介绍</router-link>
+      <router-link to="/index">插槽</router-link>
+      <router-link :to="{name: 'about',params: {id: 1,test: 'test'}}">介绍</router-link>
     </div>
     <router-view />
   </div>
@@ -20,7 +20,10 @@ export default {
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 
 <style lang="scss">
-.nav {
-  color: red;
+#app {
+  font-family: "微软雅黑";
+  a.router-link-active {
+    color: rgb(247, 172, 10);
+  }
 }
 </style>

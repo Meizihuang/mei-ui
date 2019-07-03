@@ -1,23 +1,27 @@
 import Vue from "vue";
 import Router from "vue-router";
 import IndexView from "@/views/IndexView";
-import {
-    isAbsolute
-} from "path";
 
 Vue.use(Router);
 
 export default new Router({
     mode: "history",
     routes: [{
-            path: "/",
+            path: "/index",
             name: "index",
             component: IndexView
         },
         {
-            path: "/about",
-            name: isAbsolute,
-            component: () => import( /* webpackChunkName: "about" */ "@/views/AboutView")
+            path: "/about/:id",
+            name: "about",
+            component: () => import( /* webpackChunkName: "about" */ "@/views/AboutView"),
+            props: true
+        },
+        {
+            path: "/",
+            redirect: {
+                name: "index"
+            }
         }
     ],
     scrollBehavior(to, from, savedPosition) {

@@ -1,12 +1,15 @@
 <template>
   <div class="about">
-    <h2 class="title">This is about page</h2>
+    <h2 class="title">This is about page {{id}}</h2>
   </div>
 </template>
 
 <script>
 export default {
   name: "about",
+  props: {
+    id: [String, Number]
+  },
   data() {
     return {};
   }
