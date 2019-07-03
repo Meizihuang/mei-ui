@@ -1,5 +1,7 @@
 <template>
-  <div class="about">This is about page</div>
+  <div class="about">
+    <h2 class="title">This is about page</h2>
+  </div>
 </template>
 
 <script>
@@ -13,8 +15,8 @@ export default {
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 
-<style lang="" scoped>
-.about {
+<style lang="scss" scoped>
+.title {
   color: blue;
 }
 </style>
