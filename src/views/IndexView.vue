@@ -2,6 +2,8 @@
   <div class="index" ref="testDivRef">
     <slot1 url="/">
       <h2 class="title">插槽内容&&作用域&&后背内容</h2>
+      <img src="../assets/images/logo.png" alt />
+      <img src="/static/images/aibi_c.png" alt />
       <p>{{ url }}</p>
     </slot1>
     <div
@@ -44,6 +46,7 @@
         <p v-for="(val,index) in body" :key="index">{{ index }}</p>
       </template>
     </slot-example>
+    <div class="bg-img"></div>
   </div>
 </template>
 
@@ -88,8 +91,8 @@ export default {
     slotExampleHeader
   },
   mounted() {
-    console.log(this.$refs.testRef);
-    console.log(this.$refs.testDivRef);
+    // console.log(this.$refs.testRef);
+    // console.log(this.$refs.testDivRef);
   }
 };
 </script>
@@ -101,6 +104,11 @@ export default {
   color: red;
   .split {
     color: #22f090;
+  }
+  .bg-img {
+    width: 400px;
+    height: 600px;
+    background: url("../assets/images/aibi_c.png") no-repeat top left;
   }
 }
 </style>

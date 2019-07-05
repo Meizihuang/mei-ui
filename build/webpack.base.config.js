@@ -5,6 +5,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 const config = require("../config");
+const utils = require("./utils");
 
 function resolve(_path) {
     return path.join(__dirname, "../", _path)
@@ -79,7 +80,8 @@ module.exports = env => {
                     use: [{
                         loader: "url-loader",
                         options: {
-                            limit: 10000
+                            limit: 10000,
+                            name: utils.assetsPath("images/[name].[hash:7].[ext]")
                         }
 
                     }]
@@ -90,6 +92,7 @@ module.exports = env => {
                             loader: 'url-loader',
                             options: {
                                 limit: 10000,
+                                name: utils.assetsPath("media/[name].[hash:7].[ext]")
                             }
                         }
 
@@ -102,6 +105,7 @@ module.exports = env => {
                         loader: 'url-loader',
                         options: {
                             limit: 10000,
+                            name: utils.assetsPath("font/[name].[hash:7].[ext]")
                         }
                     }]
                 }
