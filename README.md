@@ -287,3 +287,5 @@ module.exports = {
 
 [gitbub](https://github.com/frontend9/fe9-library/issues/242)
 [掘金](https://juejin.im/post/5af15e895188256715479a9a)
+
+#[vue 单页面应用](https://vue-loader.vuejs.org/zh/guide/#vue-cli)

@@ -7,6 +7,8 @@ const {
 const {
   BundleAnalyzerPlugin
 } = require("webpack-bundle-analyzer");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 const webpack = require("webpack");
 const env = require("../config/prod.env");
 const config = require("../config");
@@ -33,12 +35,21 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       "process.env": env
     }),
+
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),
+
     // 性能优化 可视化分析模板
     new BundleAnalyzerPlugin(),
+
     // 清理 /dist无用文件夹
     new CleanWebpackPlugin(),
+
+    // 分离 css
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].[hash:7].css',
+      chunkFilename: '[id].[hash:7].css',
+    })
   ],
 
   optimization: {

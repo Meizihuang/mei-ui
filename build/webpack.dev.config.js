@@ -1,8 +1,10 @@
 const webpack = require("webpack");
 const merge = require("webpack-merge");
+const path = require("path");
+
 const baseWebpackConfig = require("./webpack.base.config");
 const config = require("../config");
-const path = require("path");
+const utils = require("./utils");
 const devEnv = require("../config/dev.env");
 
 module.exports = env => {
@@ -10,7 +12,9 @@ module.exports = env => {
     const HOST = env.HOST;
     const PORT = env.PORT && Number(env.PORT);
     let devWebpackConfig = merge(baseWebpackConfig(env), {
-
+        module: {
+            rules: utils.styleCssLoader(env)
+        },
         // source maps 映射源文件，追踪错误出处 https://www.webpackjs.com/configuration/devtool/
         devtool: config.dev.devtool,
         mode: "development",
@@ -66,5 +70,6 @@ module.exports = env => {
             })
         ]
     })
+    console.log(JSON.stringify(devWebpackConfig));
     return devWebpackConfig
 }
